@@ -1,11 +1,19 @@
 #ifndef MYFILTER_H
 #define MYFILTER_H
 
+#include <QObject>
+#include <QEvent>
+#include <QMouseEvent>
 
-class MyFilter
+#include <iostream>
+
+class MyFilter : public QObject
 {
 public:
-    MyFilter();
+    QObject *keyObj;
+    QObject *mouseObj;
+protected:
+    bool eventFilter(QObject *obj, QEvent *event) override;
 };
 
 #endif // MYFILTER_H

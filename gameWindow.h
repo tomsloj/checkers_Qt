@@ -1,21 +1,49 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef GAMEWINDOW_H
+#define GAMEWINDOW_H
 
 #include <QMainWindow>
 
+#include <QDialog>
+#include <QtCore>
+#include <QtGui>
+#include <QGraphicsScene>
+#include <QGraphicsItem>
+#include <QGraphicsView>
+#include <QMouseEvent>
+
+#include <iostream>
+#include <algorithm>
+
+#include "game.h"
+
+
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui { class GameWindow; }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
+class GameWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    GameWindow(QWidget *parent = nullptr);
+    ~GameWindow();
+
+private slots:
+    void on_actionNowa_gra_triggered();
+    void resizeEvent(QResizeEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    bool eventFilter(QObject*o,QEvent*e);
 
 private:
-    Ui::MainWindow *ui;
+    Ui::GameWindow *ui;
+    QGraphicsScene *scene;
+    QGraphicsRectItem *rect;
+    QGraphicsRectItem *rect1;
+    Game *game;
+
+    int wid;
+    int hei;
+
 };
-#endif // MAINWINDOW_H
+#endif // GAMEWINDOW_H
