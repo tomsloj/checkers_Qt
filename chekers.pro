@@ -21,6 +21,7 @@ SOURCES += \
     gamewindow.cpp \
     myboard.cpp \
     myfilter.cpp \
+    pawn.cpp \
     square.cpp
 
 HEADERS += \
@@ -28,6 +29,7 @@ HEADERS += \
     gamewindow.h \
     myboard.h \
     myfilter.h \
+    pawn.h \
     square.h
 
 FORMS += \

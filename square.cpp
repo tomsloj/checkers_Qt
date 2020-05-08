@@ -10,17 +10,16 @@ Square::Square(QColor color, int x, int y, int size /*= 20*/)
     this->x = x;
     this->y = y;
     this->size = size;
-
 }
 
 void Square::changeColor()
 {
-    std::cout << "change color " << std::endl;
     if(color == Qt::black)
         color = Qt::red;
     else
     if(color == Qt::red)
         color = Qt::black;
+    update();
 }
 
 QColor Square::getColor()
@@ -43,10 +42,17 @@ void Square::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     painter->setPen(color);
     painter->fillRect(rec, brush);
     painter->drawRect(rec);
+    this->setZValue(-1);
 
 }
 
 QRectF Square::boundingRect() const
 {
     return QRectF(x,y, size, size);
+}
+
+bool Square::isEmpty()
+{
+    //TODO sprawdzenie czy ma dziecko
+    return true;
 }

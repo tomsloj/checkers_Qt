@@ -17,8 +17,12 @@ public:
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
     QRectF boundingRect() const override;
+
+    QGraphicsEllipseItem *pawn;
+    QGraphicsEllipseItem* getPawn();
+    void removePawn();
 private:
-    bool isEmpty;
+    bool isEmpty();
     bool toUse;
     QColor color;
 

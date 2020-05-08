@@ -10,6 +10,7 @@ GameWindow::GameWindow(QWidget *parent)
     , ui(new Ui::GameWindow)
 {
     ui->setupUi(this);
+    connect(ui->toolBar, SIGNAL(triggered()), this, SLOT(newGame()));
     ui->boardView->viewport()->installEventFilter(this);
 
     scene = new QGraphicsScene(this);
@@ -30,10 +31,15 @@ GameWindow::~GameWindow()
     delete scene;
 }
 
-
-void GameWindow::on_actionNowa_gra_triggered()
+void GameWindow::newGame()
 {
     //ui->boardView->setBackgroundBrush(Qt::red);
+    delete game;
+    delete scene;
+    scene = new QGraphicsScene(this);
+    scene->setBackgroundBrush(Qt::gray);
+    ui->boardView->setScene(scene);
+    game = new Game(scene);
 }
 
 void GameWindow::resizeEvent(QResizeEvent *event)
@@ -53,7 +59,6 @@ bool GameWindow::eventFilter(QObject *o,QEvent *e)
         ui->boardView->fitInView(scene->sceneRect(), Qt::KeepAspectRatio);
         std::cout << "resize" << std::endl;
         return true;
-        //lubreturnfalse;
     }
     else
     if(e->type()==QEvent::MouseButtonPress)
@@ -62,20 +67,16 @@ bool GameWindow::eventFilter(QObject *o,QEvent *e)
         int x = ui->boardView->mapToScene(mouseEvent->pos()).x();
         int y = ui->boardView->mapToScene(mouseEvent->pos()).y();
         int square = std::min(scene->width(),scene->height());
-        //std::cout << x << " " << y << " " << " " << square << std::endl;
-        //std::cout << ui->boardView->mapToScene(mouseEvent->pos()).x() << " " << ui->boardView->mapToScene(mouseEvent->pos()).y()<< "mouse Event" << std::endl;
 
 
         if(x >= 0 && y >= 0 && x <= square && y <= square )
         {
-            //std::cout << "click " << counter << std::endl;
-            //++counter;
             game->squareClicked(x, y);
 
         }
 
 
-
+        ui->boardView->fitInView(scene->sceneRect(), Qt::KeepAspectRatio);
         return true;
     }
     else

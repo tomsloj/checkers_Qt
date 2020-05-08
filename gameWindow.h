@@ -10,6 +10,7 @@
 #include <QGraphicsItem>
 #include <QGraphicsView>
 #include <QMouseEvent>
+#include <QAction>
 
 #include <iostream>
 #include <algorithm>
@@ -30,10 +31,12 @@ public:
     ~GameWindow();
 
 private slots:
-    void on_actionNowa_gra_triggered();
+    void newGame();
     void resizeEvent(QResizeEvent *event);
     void mousePressEvent(QMouseEvent *event);
     bool eventFilter(QObject*o,QEvent*e);
+
+    void on_actionNowa_gra_triggered();
 
 private:
     Ui::GameWindow *ui;

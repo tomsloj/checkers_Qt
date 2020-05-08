@@ -2,6 +2,7 @@
 #define MYBOARD_H
 
 #include "square.h"
+#include "pawn.h"
 
 #include <QPainter>
 #include <QGraphicsItem>
@@ -10,6 +11,7 @@
 #include <QGraphicsSceneMouseEvent>
 
 #include <iostream>
+#include <vector>
 
 
 class MyBoard
@@ -20,6 +22,18 @@ public:
     void squareClicked(int x, int y);
     std::pair<int, int>getSquarePos(int x, int y);
     void changeColor(std::pair<int, int>);
+
+    void move(int x, int y, int id);
+    void addBlackPawn(int x, int y, int id);
+    void addWhitePawn(int x, int y, int id);
+    void addBlackQueen(int x, int y, int id);
+    void addWhiteQueen(int x, int y, int id);
+    void removePawn(int id);
+
+    int getPawnID(int x, int y);
+
+    void updateField(int x, int y);
+
 protected:
     //void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 
@@ -29,6 +43,9 @@ private:
     Square *squares[8][8];
     Square* getSquare(int x, int y);
     Square* choosenSquare;
+
+    std::vector< Pawn* >pawns;
+    QGraphicsScene *scene;
 };
 
 #endif // MYBOARD_H
