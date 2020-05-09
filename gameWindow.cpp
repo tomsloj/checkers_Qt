@@ -1,4 +1,4 @@
-#include "gamewindow.h"
+#include "gameWindow.h"
 #include "ui_gamewindow.h"
 #include "myfilter.h"
 #include "game.h"
@@ -31,6 +31,10 @@ GameWindow::~GameWindow()
     delete scene;
 }
 
+void GameWindow::on_actionNowa_gra_triggered()
+{
+    newGame();
+}
 void GameWindow::newGame()
 {
     //ui->boardView->setBackgroundBrush(Qt::red);
@@ -41,11 +45,11 @@ void GameWindow::newGame()
     ui->boardView->setScene(scene);
     game = new Game(scene);
 }
-
+/*
 void GameWindow::resizeEvent(QResizeEvent *event)
 {
-
 }
+*/
 
 void GameWindow::mousePressEvent(QMouseEvent *event)
 {

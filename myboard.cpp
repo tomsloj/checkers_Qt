@@ -98,14 +98,21 @@ void MyBoard::changeColor(std::pair<int, int> p)
      scene->addItem(pawns[pawns.size()-1]);
      pawns[pawns.size()-1]->setZValue(1);
  }
- void MyBoard::addBlackQueen(int x, int y, int id)
+ void MyBoard::changeToQueen(int x, int y)
  {
+     x = x * size;
+     y = y * size;
+     for( unsigned int i = 0; i < pawns.size(); ++i )
+     {
+         if(pawns[i]->getX() == x && pawns[i]->getY() == y)
+         {
+             pawns[i]->setQueen();
+             break;
+         }
+     }
 
  }
- void MyBoard::addWhiteQueen(int x, int y, int id)
- {
 
- }
  void MyBoard::removePawn(int id)
  {
 

@@ -32,7 +32,7 @@ public:
 
 private slots:
     void newGame();
-    void resizeEvent(QResizeEvent *event);
+    //void resizeEvent(QResizeEvent *event);
     void mousePressEvent(QMouseEvent *event);
     bool eventFilter(QObject*o,QEvent*e);
 

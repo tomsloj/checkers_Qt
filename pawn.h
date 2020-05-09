@@ -19,16 +19,18 @@ public:
     int getY();
     void setX(int x);
     void setY(int y);
+    void setQueen();
 private:
-    QGraphicsEllipseItem *ellipse;
-
-
+   // QGraphicsEllipseItem *ellipse;
+    QPolygonF crown;
 
     QColor color;
     int x;
     int y;
     int size;
     int id;
+
+    bool isQueen;
 };
 
 #endif // PAWN_H

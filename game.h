@@ -35,8 +35,7 @@ private:
     void move(int x1, int y1, int x2, int y2);
     void addBlackPawn(int x, int y);
     void addWhitePawn(int x, int y);
-    void addBlackQueen(int x, int y);
-    void addWhiteQueen(int x, int y);
+    void changeToQueen(std::pair<int, int> p);
     void removePawn(int x, int y);
 
     void changeTourn();

@@ -68,6 +68,9 @@ void Game::squareClicked(int x, int y)
                 {
                     changeTourn();
                     beatingFlag = false;
+                    //sprawdzamy czy zmienia sie na damke
+                    if(square.first == BOARD_SIZE - 1)
+                        changeToQueen(square);
                 }
                 return;
             }
@@ -105,6 +108,9 @@ void Game::squareClicked(int x, int y)
                     board->changeColor(checked);
                     isChecked = false;
                     changeTourn();
+                    //sprawdzamy czy zmienia sie na damke
+                    if(square.first == BOARD_SIZE - 1)
+                        changeToQueen(square);
                     return;
                 }
                 else
@@ -124,6 +130,9 @@ void Game::squareClicked(int x, int y)
                     {
                         changeTourn();
                         beatingFlag = false;
+                        //sprawdzamy czy zmienia sie na damke
+                        if(square.first == BOARD_SIZE - 1)
+                            changeToQueen(square);
                     }
                     return;
                 }
@@ -152,6 +161,9 @@ void Game::squareClicked(int x, int y)
                 {
                     changeTourn();
                     beatingFlag = false;
+                    //sprawdzamy czy zmienia sie na damke
+                    if(square.first == 0)
+                        changeToQueen(square);
                 }
                 return;
             }
@@ -189,6 +201,8 @@ void Game::squareClicked(int x, int y)
                     board->changeColor(checked);
                     isChecked = false;
                     changeTourn();
+                    if(square.first == 0)
+                        changeToQueen(square);
                     return;
                 }
                 else
@@ -208,6 +222,8 @@ void Game::squareClicked(int x, int y)
                     {
                         changeTourn();
                         beatingFlag = false;
+                        if(square.first == 0)
+                            changeToQueen(square);
                     }
                     return;
                 }
@@ -218,31 +234,38 @@ void Game::squareClicked(int x, int y)
 
 bool Game::moveIsPossible(std::pair<int, int> from)
 {
-    //TODO uwzglednic kierunek ruchu (tylko do przodu)
     //zwykly pionek bialy
      if( fields[from.first][from.second] == WHITE )
      {
-         if( fields[from.first + 1][from.second + 1] == EMPTY ||
-         fields[from.first - 1][from.second + 1] == EMPTY )
+         if( (from.first + 1 < BOARD_SIZE && from.second + 1 < BOARD_SIZE && fields[from.first + 1][from.second + 1] == EMPTY) ||
+         (from.first - 1 >= 0 && from.second + 1 < BOARD_SIZE && fields[from.first - 1][from.second + 1] == EMPTY) )
          {
-
              return true;
          }
      }
+     //zwykly pionek czarny
      else
      if( fields[from.first][from.second] == BLACK )
      {
-        if( fields[from.first + 1][from.second - 1] == EMPTY ||
-                fields[from.first - 1][from.second - 1] == EMPTY )
+        if( (from.first + 1 < BOARD_SIZE && from.second - 1 >= 0 && fields[from.first + 1][from.second - 1] == EMPTY) ||
+                (from.first - 1 >= 0 && from.second - 1 >= 0 && fields[from.first - 1][from.second - 1] == EMPTY) )
         {
             return true;
         }
      }
-     //TODO damka
+     //damki
      else
+     if(fields[from.first][from.second] == WHITE_QUEEN || fields[from.first][from.second] == BLACK_QUEEN)
      {
-
+           if( (from.first + 1 < BOARD_SIZE && from.second + 1 < BOARD_SIZE && fields[from.first + 1][from.second + 1] == EMPTY) ||
+               (from.first - 1 >= 0 && from.second + 1 < BOARD_SIZE && fields[from.first - 1][from.second + 1] == EMPTY) ||
+               (from.first + 1 < BOARD_SIZE && from.second - 1 >= 0 && fields[from.first + 1][from.second - 1] == EMPTY) ||
+               (from.first - 1 >= 0 && from.second - 1 >= 0 && fields[from.first - 1][from.second - 1] == EMPTY) )
+           {
+                return true;
+           }
      }
+
      return false;
  }
 
@@ -323,9 +346,140 @@ bool Game::beatingIsPossible(std::pair<int, int> from)
         }
         return false;
     }
+    //czarna damka
+    else
+    if( fields[from.first][from.second] == BLACK_QUEEN )
+    {
+        //badamy kazdy z 4 skosow
+        int x1, y1;
 
-    //TODO damki
+        //w strone rosnacych wartosci
+        x1 = from.first + 1;
+        y1 = from.second + 1;
+        while( x1 < BOARD_SIZE && y1 < BOARD_SIZE && fields[x1][y1] == EMPTY )
+        {
+            ++x1;
+            ++y1;
+        }
+        if( x1 < BOARD_SIZE - 1 && y1 < BOARD_SIZE - 1 &&
+           (fields[x1][y1] == WHITE || fields[x1][y1] == WHITE_QUEEN) &&
+            fields[x1 + 1][y1 + 1] == EMPTY )
+        {
+            return true;
+        }
 
+        //w strone malejacych wartosci
+        x1 = from.first - 1;
+        y1 = from.second - 1;
+        while( x1 >= 0 && y1 >= 0 && fields[x1][y1] == EMPTY )
+        {
+            --x1;
+            --y1;
+        }
+        if( x1 > 0 && y1 > 0 &&
+           (fields[x1][y1] == WHITE || fields[x1][y1] == WHITE_QUEEN) &&
+            fields[x1 - 1][y1 - 1] == EMPTY )
+        {
+            return true;
+        }
+
+        //rosnace x, malejace y
+        x1 = from.first + 1;
+        y1 = from.second - 1;
+        while( x1 < BOARD_SIZE && y1 >= 0 && fields[x1][y1] == EMPTY )
+        {
+            ++x1;
+            --y1;
+        }
+        if( x1 < BOARD_SIZE - 1 && y1 > 0 &&
+           (fields[x1][y1] == WHITE || fields[x1][y1] == WHITE_QUEEN) &&
+            fields[x1 + 1][y1 - 1] == EMPTY )
+        {
+            return true;
+        }
+
+        //malejace x, rosnace y
+        x1 = from.first - 1;
+        y1 = from.second + 1;
+        while( x1 >= 0 && y1 < BOARD_SIZE && fields[x1][y1] == EMPTY )
+        {
+            --x1;
+            ++y1;
+        }
+        if( x1 > 0 && y1 < BOARD_SIZE - 1 &&
+           (fields[x1][y1] == WHITE || fields[x1][y1] == WHITE_QUEEN) &&
+            fields[x1 - 1][y1 + 1] == EMPTY )
+        {
+            return true;
+        }
+    }
+    //biala damka
+    else
+    if( fields[from.first][from.second] == WHITE_QUEEN )
+    {
+        //badamy kazdy z 4 skosow
+        int x1, y1;
+
+        //w strone rosnacych wartosci
+        x1 = from.first + 1;
+        y1 = from.second + 1;
+        while( x1 < BOARD_SIZE && y1 < BOARD_SIZE && fields[x1][y1] == EMPTY )
+        {
+            ++x1;
+            ++y1;
+        }
+        if( x1 < BOARD_SIZE - 1 && y1 < BOARD_SIZE - 1 &&
+           (fields[x1][y1] == BLACK || fields[x1][y1] == BLACK_QUEEN) &&
+            fields[x1 + 1][y1 + 1] == EMPTY )
+        {
+            return true;
+        }
+
+        //w strone malejacych wartosci
+        x1 = from.first - 1;
+        y1 = from.second - 1;
+        while( x1 >= 0 && y1 >= 0 && fields[x1][y1] == EMPTY )
+        {
+            --x1;
+            --y1;
+        }
+        if( x1 > 0 && y1 > 0 &&
+           (fields[x1][y1] == BLACK || fields[x1][y1] == BLACK_QUEEN) &&
+            fields[x1 - 1][y1 - 1] == EMPTY )
+        {
+            return true;
+        }
+
+        //rosnace x, malejace y
+        x1 = from.first + 1;
+        y1 = from.second - 1;
+        while( x1 < BOARD_SIZE && y1 >= 0 && fields[x1][y1] == EMPTY )
+        {
+            ++x1;
+            --y1;
+        }
+        if( x1 < BOARD_SIZE - 1 && y1 > 0 &&
+           (fields[x1][y1] == BLACK || fields[x1][y1] == BLACK_QUEEN) &&
+            fields[x1 + 1][y1 - 1] == EMPTY )
+        {
+            return true;
+        }
+
+        //malejace x, rosnace y
+        x1 = from.first - 1;
+        y1 = from.second + 1;
+        while( x1 >= 0 && y1 < BOARD_SIZE && fields[x1][y1] == EMPTY )
+        {
+            --x1;
+            ++y1;
+        }
+        if( x1 > 0 && y1 < BOARD_SIZE - 1 &&
+           (fields[x1][y1] == BLACK || fields[x1][y1] == BLACK_QUEEN) &&
+            fields[x1 - 1][y1 + 1] == EMPTY )
+        {
+            return true;
+        }
+    }
     return false;
 }
 
@@ -354,48 +508,40 @@ bool Game::move(std::pair<int, int> from, std::pair<int, int> to)
             board->updateField(from.first, from.second);
             return true;
         }
-        return false;
     }
-
-    /*
-    //zwykly pionek
-    if( fields[from.first][from.second] == BLACK || fields[from.first][from.second] == WHITE )
+    //damka
+    else
+    if( fields[x1][y1] == BLACK_QUEEN || fields[x1][y1] == WHITE_QUEEN )
     {
-        if( from.first + 1 == to.first && from.second + 1 == to.second )
+        //sprawdzamy czy ruch jest po skosie
+        if( abs(x1-x2) == abs(y1-y2) )
         {
-            fields[to.first][to.second] = fields[from.first][from.second];
-            fields[from.first][from.second] = EMPTY;
-            move(from.first, from.second, to.first, to.second);
-            return true;
-        }
-        else
-        if(from.first + 1 == to.first && from.second - 1 == to.second)
-        {
-            fields[to.first][to.second] = fields[from.first][from.second];
-            fields[from.first][from.second] = EMPTY;
-            move(from.first, from.second, to.first, to.second);
-            return true;
-        }
-        else
-        if(from.first - 1 == to.first && from.second + 1 == to.second)
-        {
-            fields[to.first][to.second] = fields[from.first][from.second];
-            fields[from.first][from.second] = EMPTY;
-            move(from.first, from.second, to.first, to.second);
-            return true;
-        }
-        else
-        if(from.first - 1 == to.first && from.second - 1 == to.second)
-        {
-            fields[to.first][to.second] = fields[from.first][from.second];
-            fields[from.first][from.second] = EMPTY;
-            move(from.first, from.second, to.first, to.second);
+            int xDirection;
+            int yDirection;
+            if( x1 > x2 )
+                xDirection = -1;
+            else
+                xDirection = 1;
+            if( y1 > y2 )
+                yDirection = -1;
+            else
+                yDirection = 1;
+            while( x1 != x2 && y1 != y2 )
+            {
+                x1 += xDirection;
+                y1 += yDirection;
+                if( fields[x1][y1] != EMPTY )
+                    return false;
+            }
+            fields[x2][y2] = fields[x1][y1];
+            fields[x1][y1] = EMPTY;
+            move(x1, y1, x2, y2);
+            board->updateField(from.first, from.second);
             return true;
         }
     }
 
     return false;
-    */
 }
 
 bool Game::beat(std::pair<int, int> from, std::pair<int, int> to)
@@ -403,15 +549,16 @@ bool Game::beat(std::pair<int, int> from, std::pair<int, int> to)
     if(fields[to.first][to.second] != EMPTY)
         return false;
 
+    int x1 = from.first;
+    int y1 = from.second;
+    int x2;
+    int y2;
+    int x3 = to.first;
+    int y3 = to.second;
+
     //czarny pionek
     if( fields[from.first][from.second] == BLACK )
     {
-        int x1 = from.first;
-        int y1 = from.second;
-        int x2;
-        int y2;
-        int x3 = to.first;
-        int y3 = to.second;
         x2 = (x1+x3)/2;
         y2 = (y1+y3)/2;
 
@@ -429,12 +576,6 @@ bool Game::beat(std::pair<int, int> from, std::pair<int, int> to)
     else
     if( fields[from.first][from.second] == WHITE )
     {
-        int x1 = from.first;
-        int y1 = from.second;
-        int x2;
-        int y2;
-        int x3 = to.first;
-        int y3 = to.second;
         x2 = (x1+x3)/2;
         y2 = (y1+y3)/2;
 
@@ -448,7 +589,94 @@ bool Game::beat(std::pair<int, int> from, std::pair<int, int> to)
         }
         return false;
     }
-    //TODO damki
+    //czarna damka
+    else
+    if( fields[from.first][from.second] == BLACK_QUEEN )
+    {
+        //sprawdzamy czy ruch jest po skosie
+        if( abs(x1-x3) == abs(y1-y3) )
+        {
+            int xDirection;
+            int yDirection;
+            int numberOfPawns = 0;
+
+            if( x1 > x3 )
+                xDirection = -1;
+            else
+                xDirection = 1;
+            if( y1 > y3 )
+                yDirection = -1;
+            else
+                yDirection = 1;
+            while( x1 != x3 && y1 != y3 )
+            {
+                x1 += xDirection;
+                y1 += yDirection;
+                if( fields[x1][y1] == WHITE || fields[x1][y1] == WHITE_QUEEN )
+                {
+                    ++numberOfPawns;
+                    x2 = x1;
+                    y2 = y1;
+                }
+                else
+                if( fields[x1][y1] != EMPTY )
+                    return false;
+            }
+            if( numberOfPawns == 1 )
+            {
+                fields[x3][y3] = fields[x1][y1];
+                fields[x1][y1] = EMPTY;
+                move(x1, y1, x3, y3);
+                removePawn(x2, y2);
+                return true;
+            }
+            return false;
+        }
+    }
+    //biala damka
+    else
+    if( fields[from.first][from.second] == WHITE_QUEEN )
+    {
+        //sprawdzamy czy ruch jest po skosie
+        if( abs(x1-x3) == abs(y1-y3) )
+        {
+            int xDirection;
+            int yDirection;
+            int numberOfPawns = 0;
+
+            if( x1 > x3 )
+                xDirection = -1;
+            else
+                xDirection = 1;
+            if( y1 > y3 )
+                yDirection = -1;
+            else
+                yDirection = 1;
+            while( x1 != x3 && y1 != y3 )
+            {
+                x1 += xDirection;
+                y1 += yDirection;
+                if( fields[x1][y1] == BLACK || fields[x1][y1] == BLACK_QUEEN )
+                {
+                    ++numberOfPawns;
+                    x2 = x1;
+                    y2 = y1;
+                }
+                else
+                    if( fields[x1][y1] != EMPTY )
+                        return false;
+            }
+            if( numberOfPawns == 1 )
+            {
+                fields[x3][y3] = fields[x1][y1];
+                fields[x1][y1] = EMPTY;
+                move(x1, y1, x3, y3);
+                removePawn(x2, y2);
+                return true;
+            }
+            return false;
+            }
+    }
     return false;
 }
 
@@ -472,15 +700,15 @@ void Game::addWhitePawn(int x, int y)
     ++maxID;
 }
 
-void Game::addBlackQueen(int x, int y)
+void Game::changeToQueen(std::pair<int, int> p)
 {
-
+    board->changeToQueen(p.first, p.second);
+    if( fields[p.first][p.second] == BLACK )
+        fields[p.first][p.second] = BLACK_QUEEN;
+    else
+        fields[p.first][p.second] = WHITE_QUEEN;
 }
 
-void Game::addWhiteQueen(int x, int y)
-{
-
-}
 void Game::removePawn(int x, int y)
 {
     int id = board->getPawnID(x,y);
@@ -531,9 +759,12 @@ bool Game::isGameOver()
                 if( fields[i][j] == WHITE || fields[i][j] == WHITE_QUEEN )
                 {
                     if( moveIsPossible(std::make_pair(i, j)))
+                    {
+                        //std::cout << "move " << i << " " << j << std::endl;
                         return false;
+                    }
                     else
-                    if( beatingIsPossible(std::make_pair(i, j)));
+                    if( beatingIsPossible(std::make_pair(i, j)))
                         return false;
                 }
             }
@@ -544,7 +775,7 @@ bool Game::isGameOver()
                     if( moveIsPossible(std::make_pair(i, j)))
                         return false;
                     else
-                    if( beatingIsPossible(std::make_pair(i, j)));
+                    if( beatingIsPossible(std::make_pair(i, j)))
                         return false;
                 }
             }

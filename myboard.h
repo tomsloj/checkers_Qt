@@ -26,8 +26,7 @@ public:
     void move(int x, int y, int id);
     void addBlackPawn(int x, int y, int id);
     void addWhitePawn(int x, int y, int id);
-    void addBlackQueen(int x, int y, int id);
-    void addWhiteQueen(int x, int y, int id);
+    void changeToQueen(int x, int y);
     void removePawn(int id);
 
     int getPawnID(int x, int y);
