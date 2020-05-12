@@ -11,7 +11,8 @@ class Square : public QGraphicsRectItem
 {
 public:
     Square(QColor color, int x, int y, int size = 20);
-    void changeColor();
+    void uncheck();
+    void check();
     QColor getColor();
     bool isAvaliable();
 

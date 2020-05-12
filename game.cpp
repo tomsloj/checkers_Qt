@@ -6,6 +6,7 @@ Game::Game(QGraphicsScene *scene)
     maxID = 0;
     whitePawnsCounter = 0;
     blackPawnsCounter = 0;
+
     for( int i = 0; i < BOARD_SIZE; ++i )
         for( int j = 0; j < BOARD_SIZE; ++j )
             if( (i + j) % 2 == 1 )
@@ -35,6 +36,7 @@ Game::Game(QGraphicsScene *scene)
     isChecked = false;
     whiteTourn = true;
     beatingFlag = false;
+    gameOverFlag = false;
 }
 
 Game::~Game()
@@ -54,13 +56,14 @@ void Game::squareClicked(int x, int y)
         {
             if(beat(checked, square))
             {
-                board->changeColor(checked);
+                lastBeating = 20;
+                board->uncheck(checked);
                 isChecked = false;
                 //sprawdzam czy kolejne bicie jest mozliwe
                 if(beatingIsPossible(square))
                 {
                     beatingFlag = true;
-                    board->changeColor(square);
+                    board->check(square);
                     isChecked = true;
                     checked = square;
                 }
@@ -82,30 +85,30 @@ void Game::squareClicked(int x, int y)
             {
                 isChecked = true;
                 checked = square;
-                board->changeColor(square);
+                board->check(square);
             }
             //odznaczamy pole
             else
             if(isChecked && checked == square)
             {
                 isChecked = false;
-                board->changeColor(square);
+                board->uncheck(square);
             }
             //zaznaczamy inne pole
             else
-            if( (fields[square.first][square.second] == WHITE || fields[square.first][square.second] == WHITE_QUEEN) )
+            if( isChecked && (fields[square.first][square.second] == WHITE || fields[square.first][square.second] == WHITE_QUEEN) )
             {
-                board->changeColor(checked);
+                board->uncheck(checked);
                 checked = square;
-                board->changeColor(square);
+                board->check(square);
             }
             //probujemy wykonac ruch
             else
-            if(fields[square.first][square.second] == EMPTY)
+            if( isChecked && fields[square.first][square.second] == EMPTY)
             {
                 if( move(checked, square) )
                 {
-                    board->changeColor(checked);
+                    board->uncheck(checked);
                     isChecked = false;
                     changeTourn();
                     //sprawdzamy czy zmienia sie na damke
@@ -116,13 +119,14 @@ void Game::squareClicked(int x, int y)
                 else
                 if(beat(checked, square))
                 {
-                    board->changeColor(checked);
+                    lastBeating = 20;
+                    board->uncheck(checked);
                     isChecked = false;
                     //sprawdzam czy kolejne bicie jest mozliwe
                     if(beatingIsPossible(square))
                     {
                         beatingFlag = true;
-                        board->changeColor(square);
+                        board->check(square);
                         isChecked = true;
                         checked = square;
                     }
@@ -147,13 +151,14 @@ void Game::squareClicked(int x, int y)
         {
             if(beat(checked, square))
             {
-                board->changeColor(checked);
+                board->uncheck(checked);
                 isChecked = false;
                 //sprawdzam czy kolejne bicie jest mozliwe
                 if(beatingIsPossible(square))
                 {
+                    lastBeating = 20;
                     beatingFlag = true;
-                    board->changeColor(square);
+                    board->check(square);
                     isChecked = true;
                     checked = square;
                 }
@@ -175,30 +180,30 @@ void Game::squareClicked(int x, int y)
             {
                 isChecked = true;
                 checked = square;
-                board->changeColor(square);
+                board->check(square);
             }
             //odznaczamy pole
             else
             if(isChecked && checked == square)
             {
                 isChecked = false;
-                board->changeColor(square);
+                board->uncheck(square);
             }
             //zaznaczamy inne pole
             else
-            if( (fields[square.first][square.second] == BLACK || fields[square.first][square.second] == BLACK_QUEEN) )
+            if( isChecked && (fields[square.first][square.second] == BLACK || fields[square.first][square.second] == BLACK_QUEEN) )
             {
-                board->changeColor(checked);
+                board->uncheck(checked);
                 checked = square;
-                board->changeColor(square);
+                board->check(square);
             }
             //probujemy wykonac ruch
             else
-            if(fields[square.first][square.second] == EMPTY)
+            if( isChecked && fields[square.first][square.second] == EMPTY)
             {
                 if( move(checked, square) )
                 {
-                    board->changeColor(checked);
+                    board->uncheck(checked);
                     isChecked = false;
                     changeTourn();
                     if(square.first == 0)
@@ -208,13 +213,14 @@ void Game::squareClicked(int x, int y)
                 else
                 if(beat(checked, square))
                 {
-                    board->changeColor(checked);
+                    lastBeating = 20;
+                    board->uncheck(checked);
                     isChecked = false;
                     //sprawdzam czy kolejne bicie jest mozliwe
                     if(beatingIsPossible(square))
                     {
                         beatingFlag = true;
-                        board->changeColor(square);
+                        board->check(square);
                         isChecked = true;
                         checked = square;
                     }
@@ -238,7 +244,7 @@ bool Game::moveIsPossible(std::pair<int, int> from)
      if( fields[from.first][from.second] == WHITE )
      {
          if( (from.first + 1 < BOARD_SIZE && from.second + 1 < BOARD_SIZE && fields[from.first + 1][from.second + 1] == EMPTY) ||
-         (from.first - 1 >= 0 && from.second + 1 < BOARD_SIZE && fields[from.first - 1][from.second + 1] == EMPTY) )
+         (from.first + 1 < BOARD_SIZE && from.second - 1 >= 0 && fields[from.first + 1][from.second - 1] == EMPTY) )
          {
              return true;
          }
@@ -247,7 +253,7 @@ bool Game::moveIsPossible(std::pair<int, int> from)
      else
      if( fields[from.first][from.second] == BLACK )
      {
-        if( (from.first + 1 < BOARD_SIZE && from.second - 1 >= 0 && fields[from.first + 1][from.second - 1] == EMPTY) ||
+        if( (from.first - 1 >=0 && from.second + 1 < BOARD_SIZE && fields[from.first - 1][from.second + 1] == EMPTY) ||
                 (from.first - 1 >= 0 && from.second - 1 >= 0 && fields[from.first - 1][from.second - 1] == EMPTY) )
         {
             return true;
@@ -533,6 +539,8 @@ bool Game::move(std::pair<int, int> from, std::pair<int, int> to)
                 if( fields[x1][y1] != EMPTY )
                     return false;
             }
+            x1 = from.first;
+            y1 = from.second;
             fields[x2][y2] = fields[x1][y1];
             fields[x1][y1] = EMPTY;
             move(x1, y1, x2, y2);
@@ -624,6 +632,8 @@ bool Game::beat(std::pair<int, int> from, std::pair<int, int> to)
             }
             if( numberOfPawns == 1 )
             {
+                x1 = from.first;
+                y1 = from.second;
                 fields[x3][y3] = fields[x1][y1];
                 fields[x1][y1] = EMPTY;
                 move(x1, y1, x3, y3);
@@ -668,6 +678,8 @@ bool Game::beat(std::pair<int, int> from, std::pair<int, int> to)
             }
             if( numberOfPawns == 1 )
             {
+                x1 = from.first;
+                y1 = from.second;
                 fields[x3][y3] = fields[x1][y1];
                 fields[x1][y1] = EMPTY;
                 move(x1, y1, x3, y3);
@@ -729,18 +741,22 @@ void Game::removePawn(int x, int y)
     board->removePawn(id);
 }
 
-
 void Game::changeTourn()
 {
+    --lastBeating;
     whiteTourn = !whiteTourn;
     if(isGameOver())
     {
         std::cout << "GAME OVER" <<std::endl;
+        gameOverFlag = true;
     }
 }
 
 bool Game::isGameOver()
 {
+    //sytuacja patowa
+    if(lastBeating == 0)
+        return true;
     if(whiteTourn)
     {
         if(whitePawnsCounter == 0)
@@ -751,6 +767,7 @@ bool Game::isGameOver()
         if(blackPawnsCounter == 0)
             return true;
     }
+
     for( int i = 0; i < 8; ++i )
         for( int j = 0; j < 8; ++j )
         {
@@ -780,5 +797,10 @@ bool Game::isGameOver()
                 }
             }
         }
-    return false;
+    return true;
+}
+
+bool Game::getGameOverFlag()
+{
+   return gameOverFlag;
 }

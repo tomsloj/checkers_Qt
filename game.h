@@ -4,6 +4,7 @@
 #include <vector>
 #include <cstdlib>
 #include <QGraphicsScene>
+#include <QSettings>
 
 #include "myboard.h"
 
@@ -11,9 +12,14 @@ class Game
 {
     enum field{EMPTY, BLOCKED, WHITE, BLACK, WHITE_QUEEN, BLACK_QUEEN};
 public:
+    //static QColor pawnBlack;
+    //static QColor pawnWhite;
+
+
     Game(QGraphicsScene *scene);
     ~Game();
     void squareClicked(int x, int y);
+    bool getGameOverFlag();
 private:
     MyBoard *board;
     field fields[8][8];
@@ -26,6 +32,7 @@ private:
 
     int whitePawnsCounter;
     int blackPawnsCounter;
+    bool gameOverFlag;
 
     bool moveIsPossible(std::pair<int, int> from);
     bool beatingIsPossible(std::pair<int, int> from);
@@ -42,6 +49,8 @@ private:
     bool isGameOver();
 
     const int BOARD_SIZE = 8;
+
+    int lastBeating = 20;
 };
 
 #endif // GAME_H

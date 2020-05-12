@@ -37,21 +37,25 @@ void MyBoard::squareClicked(int x, int y)
 
     if(choosenSquare != nullptr && choosenSquare != s)
     {
-        choosenSquare->changeColor();
+        choosenSquare->uncheck();
         scene->update();
     }
 
     if(s->getColor() != Qt::white)
-        s->changeColor();
+        s->uncheck();
 
     if(s->getColor()==Qt::black)
         choosenSquare = nullptr;
     else
         choosenSquare = s;
 }
-void MyBoard::changeColor(std::pair<int, int> p)
+void MyBoard::uncheck(std::pair<int, int> p)
 {
-    squares[p.first][p.second]->changeColor();
+    squares[p.first][p.second]->uncheck();
+}
+void MyBoard::check(std::pair<int, int> p)
+{
+    squares[p.first][p.second]->check();
 }
 
  Square* MyBoard::getSquare(int x, int y)
@@ -73,17 +77,61 @@ void MyBoard::changeColor(std::pair<int, int> p)
 
  void MyBoard::move(int x, int y, int id)
  {
+
      for( unsigned int i = 0; i < pawns.size(); ++i )
      {
          if(pawns[i]->getID() == id)
          {
              pawns[i]->setX(x*size);
              pawns[i]->setY(y*size);
-             pawns[i]->update();
              pawns[i]->setZValue(10);
+             pawns[i]->update();
+             /*
+             animationID = id;
+             newX = x;
+             newY = y;
+             //QPropertyAnimation* animation = new QPropertyAnimation(tmpPawn, "opacity");
+             QPropertyAnimation* animation = new QPropertyAnimation(pawns[i], "opacity");
+             animation->setDuration(animationTime);
+             animation->setStartValue(1.0);
+             animation->setEndValue(0.0);
+             QObject::connect(animation, SIGNAL(finished()), SLOT(appearAnimation()));
+             animation->start();
+            */
+             //
+
+             //animation2->setDuration(animationTime);
+             //animation2->setStartValue(0.0);
+             //animation2->setEndValue(1.0);
+             //animation2->start();
+
+             //QParallelAnimationGroup *group = new QParallelAnimationGroup;
+             //group->addAnimation(animation);
+             //group->addAnimation(animation2);
+             //group->start(QAbstractAnimation::DeleteWhenStopped);
+
          }
 
      }
+ }
+
+ void MyBoard::appearAnimation()
+ {
+     pawns[animationID]->setX(newX*size);
+     pawns[animationID]->setY(newY*size);
+     pawns[animationID]->setZValue(10);
+     pawns[animationID]->update();
+    // std::cout << "appear " << id <<std::endl;
+     QPropertyAnimation* animation = new QPropertyAnimation(pawns[animationID], "opacity");
+     animation->setDuration(animationTime);
+     animation->setStartValue(0.0);
+     animation->setEndValue(1.0);
+     animation->start();
+ }
+
+ void MyBoard::changeCoordinates(int x, int y)
+ {
+
  }
  void MyBoard::addBlackPawn(int x, int y, int id)
  {
@@ -115,22 +163,41 @@ void MyBoard::changeColor(std::pair<int, int> p)
 
  void MyBoard::removePawn(int id)
  {
-
-
      for( std::vector<Pawn*>::iterator it = pawns.begin(); it != pawns.end(); ++it )
      {
          if((*it)->getID() == id)
          {
+             /*
+             QPropertyAnimation* animation = new QPropertyAnimation((*it), "opacity");
+             animation->setDuration(animationTime);
+             animation->setStartValue(1.0);
+             animation->setEndValue(0.0);
+             QObject::connect(animation, SIGNAL(finished()), SLOT(eraseIterator()));
+             animation->start();
+             iterator = it;
+             */
+
              Pawn* p = (*it);
              if(p->scene() != NULL)
                 scene->removeItem(p);
              (p)->setZValue(-111);
              pawns.erase(it);
+
              //delete p;
-             std::cout << "remove " << id <<std::endl;
+
              break;
          }
      }
+ }
+
+ void MyBoard::eraseIterator()
+ {
+     std::cout << "end" << std::endl;
+     Pawn* p = (*iterator);
+     if(p->scene() != NULL)
+        scene->removeItem(p);
+     (p)->setZValue(-111);
+     pawns.erase(iterator);
  }
 
  int MyBoard::getPawnID(int x, int y)

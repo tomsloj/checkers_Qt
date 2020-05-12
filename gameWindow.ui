@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>510</width>
-    <height>438</height>
+    <width>521</width>
+    <height>540</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -44,7 +44,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>510</width>
+     <width>521</width>
      <height>21</height>
     </rect>
    </property>
@@ -53,6 +53,7 @@
      <string>Gra</string>
     </property>
     <addaction name="actionNowa_gra"/>
+    <addaction name="actionUstawienia"/>
    </widget>
    <addaction name="menuGra"/>
   </widget>
@@ -67,6 +68,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionNowa_gra"/>
+   <addaction name="actionUstawienia"/>
   </widget>
   <action name="actionNowa_gra">
    <property name="icon">
@@ -77,8 +79,18 @@
     <string>Nowa gra</string>
    </property>
   </action>
+  <action name="actionUstawienia">
+   <property name="icon">
+    <iconset resource="settings.qrc">
+     <normaloff>:/settings/interface.png</normaloff>:/settings/interface.png</iconset>
+   </property>
+   <property name="text">
+    <string>Ustawienia</string>
+   </property>
+  </action>
  </widget>
  <resources>
+  <include location="settings.qrc"/>
   <include location="resources.qrc"/>
  </resources>
  <connections/>

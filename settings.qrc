@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/settings">
+        <file>interface.png</file>
+    </qresource>
+</RCC>

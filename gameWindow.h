@@ -11,11 +11,13 @@
 #include <QGraphicsView>
 #include <QMouseEvent>
 #include <QAction>
+#include <QMessageBox>
 
 #include <iostream>
 #include <algorithm>
 
 #include "game.h"
+#include "settingswidget.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -28,15 +30,13 @@ class GameWindow : public QMainWindow
 
 public:
     GameWindow(QWidget *parent = nullptr);
-    ~GameWindow();
+    ~GameWindow(); 
 
 private slots:
-    void newGame();
+    void toolBarAction(QAction* action);
     //void resizeEvent(QResizeEvent *event);
-    void mousePressEvent(QMouseEvent *event);
+    //void mousePressEvent(QMouseEvent *event);
     bool eventFilter(QObject*o,QEvent*e);
-
-    void on_actionNowa_gra_triggered();
 
 private:
     Ui::GameWindow *ui;
@@ -47,6 +47,8 @@ private:
 
     int wid;
     int hei;
+
+    void newGame();
 
 };
 #endif // GAMEWINDOW_H

@@ -12,13 +12,14 @@ Square::Square(QColor color, int x, int y, int size /*= 20*/)
     this->size = size;
 }
 
-void Square::changeColor()
+void Square::uncheck()
 {
-    if(color == Qt::black)
-        color = Qt::red;
-    else
-    if(color == Qt::red)
-        color = Qt::black;
+    color = Qt::black;
+    update();
+}
+void Square::check()
+{
+    color = Qt::red;
     update();
 }
 

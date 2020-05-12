@@ -8,7 +8,19 @@ Pawn::Pawn(int x, int y, int size, QColor color, int id)
     this->size = size;
     this->color = color;
     this->id = id;
-
+    setZValue(10);
+    //qreal tmp = 0.5;
+    //setOpacity(tmp);
+}
+Pawn::Pawn(Pawn &pawn)
+{
+    crown = pawn.crown;
+    color = pawn.color;
+    x = pawn.x;
+    y = pawn.y;
+    size = pawn.size;
+    id = pawn.id;
+    isQueen = pawn.isQueen;
 }
 
 Pawn::~Pawn()
@@ -36,6 +48,19 @@ void Pawn::setY(int y)
     this->y = y;
 }
 
+QPoint Pawn::pos()
+{
+    return QPoint(x,y);
+}
+
+void Pawn::setPos(QPoint p)
+{
+    setX(p.x());
+    setY(p.y());
+    update();
+}
+
+
 void Pawn::setQueen()
 {
     isQueen = true;
@@ -45,6 +70,21 @@ void Pawn::setQueen()
 void Pawn::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget /*= nullptr*/)
 {
     QRectF rec = QRectF(x + size/8,y + size/8, 3*size/4, 3*size/4);
+
+    QColor color;
+    if( this->color == Qt::black )
+    {
+        QSettings settings("MySoft", "Star Runner");
+
+        color = settings.value("blackPawn", QColor(Qt::black)).value<QColor>();
+    }
+    else
+    {
+        QSettings settings("MySoft", "Star Runner");
+
+        color = settings.value("whitePawn", QColor(Qt::black)).value<QColor>();
+
+    }
 
     QBrush brush(color);
     painter->setPen(color);
@@ -67,8 +107,8 @@ void Pawn::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
         crown.append(QPointF(x1 + 3*crownWidth/4, y1 + crownHeight/2));
         crown.append(QPointF(x1 + crownWidth, y1));
         crown.append(QPointF(x1 + crownWidth, y1 + crownHeight));
-        painter->setPen(QPen(Qt::yellow, 0));
-        painter->setBrush(Qt::yellow);
+        painter->setPen(QPen(Qt::black, 0.3));
+        painter->setBrush(QColor("#ffeb3b"));
         painter->drawPolygon(crown);
     }
 
@@ -77,4 +117,19 @@ void Pawn::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
 QRectF Pawn::boundingRect() const
 {
     return QRectF(x,y, size, size);
+}
+/*
+QRectF Pawn::geometry()
+{
+    return boundingRect();
+}
+void setGeometry(const QRect & geometry)
+{
+
+}
+*/
+void Pawn::changeOpacity(qreal opacity)
+{
+    setOpacity(opacity);
+    update();
 }

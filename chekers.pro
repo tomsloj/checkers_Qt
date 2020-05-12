@@ -20,20 +20,21 @@ SOURCES += \
     main.cpp \
     gamewindow.cpp \
     myboard.cpp \
-    myfilter.cpp \
     pawn.cpp \
+    settingswidget.cpp \
     square.cpp
 
 HEADERS += \
     game.h \
     gamewindow.h \
     myboard.h \
-    myfilter.h \
     pawn.h \
+    settingswidget.h \
     square.h
 
 FORMS += \
-    gamewindow.ui
+    gamewindow.ui \
+    settingswidget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -41,4 +42,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    resources.qrc
+    resources.qrc \
+    settings.qrc

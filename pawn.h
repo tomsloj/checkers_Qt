@@ -4,11 +4,21 @@
 #include <QColor>
 #include <QGraphicsItem>
 #include <QPainter>
+#include <QSettings>
 
-class Pawn : public QGraphicsRectItem
+#include <iostream>
+
+Q_GLOBAL_STATIC(QColor, blackPawnColor);
+Q_GLOBAL_STATIC(QColor, whitePawnColor);
+
+class Pawn : public QObject, public QGraphicsRectItem
 {
+    Q_OBJECT
+    Q_PROPERTY(QPoint pos READ pos WRITE setPos)
+    Q_PROPERTY(qreal opacity READ opacity WRITE setOpacity)
 public:
     Pawn(int x, int y, int size, QColor color, int id);
+    Pawn(Pawn &pawn);
     ~Pawn();
 
 
@@ -20,6 +30,12 @@ public:
     void setX(int x);
     void setY(int y);
     void setQueen();
+
+    QPoint pos();
+    //QRectF geometry();
+    //void setGeometry(const QRectF & geometry);
+    void changeOpacity(qreal opacity);
+    void setPos(QPoint p);
 private:
    // QGraphicsEllipseItem *ellipse;
     QPolygonF crown;
