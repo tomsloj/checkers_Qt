@@ -34,18 +34,9 @@ GameWindow::~GameWindow()
     delete scene;
 }
 
-/*
-void GameWindow::on_actionNowa_gra_triggered()
-{
-    std::cout << "new game" << std::endl;
-    newGame();
-}
-*/
 void GameWindow::toolBarAction(QAction* action)
 {
     QString name = action->objectName();
-    std::string current_locale_text = name.toLocal8Bit().constData();
-    std::cout << current_locale_text << std::endl;
     if(name == "actionNowa_gra")
         newGame();
     else
@@ -59,9 +50,6 @@ void GameWindow::toolBarAction(QAction* action)
 
 void GameWindow::newGame()
 {
-    //QString name = action->objectName();
-    //std::string current_locale_text = name.toLocal8Bit().constData();
-    //std::cout << current_locale_text << std::endl;
     delete game;
     delete scene;
     scene = new QGraphicsScene(this);
@@ -69,18 +57,12 @@ void GameWindow::newGame()
     ui->boardView->setScene(scene);
     game = new Game(scene);
 }
-/*
-void GameWindow::mousePressEvent(QMouseEvent *event)
-{
-    //std::cout << event->pos().x() << " " << event->pos().y() << std::endl;
-}
-*/
+
 bool GameWindow::eventFilter(QObject *o,QEvent *e)
 {
     if(e->type()==QEvent::Resize)
     {
         ui->boardView->fitInView(scene->sceneRect(), Qt::KeepAspectRatio);
-        std::cout << "resize" << std::endl;
         return true;
     }
     else
@@ -118,7 +100,7 @@ bool GameWindow::eventFilter(QObject *o,QEvent *e)
                   this->close();
                   break;
               default:
-                  // should never be reached
+                  //
                   break;
             }
         }

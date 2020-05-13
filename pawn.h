@@ -32,12 +32,11 @@ public:
     void setQueen();
 
     QPoint pos();
-    //QRectF geometry();
-    //void setGeometry(const QRectF & geometry);
     void changeOpacity(qreal opacity);
     void setPos(QPoint p);
+signals:
+    void updateOpacity();
 private:
-   // QGraphicsEllipseItem *ellipse;
     QPolygonF crown;
 
     QColor color;

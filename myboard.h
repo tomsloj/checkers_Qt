@@ -42,8 +42,8 @@ public:
 protected:
     //void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 private slots:
-    void appearAnimation();
-    void eraseIterator();
+    //void appearAnimation();
+    //void eraseIterator();
 
 private:
     int size;
@@ -54,6 +54,7 @@ private:
     std::vector<Pawn*>::iterator iterator;
     std::vector< Pawn* >pawns;
     QGraphicsScene *scene;
+    QPropertyAnimation* animation;
     int animationID;
     int newX;
     int newY;

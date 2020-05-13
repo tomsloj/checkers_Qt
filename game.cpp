@@ -46,7 +46,6 @@ Game::~Game()
 
 void Game::squareClicked(int x, int y)
 {
-    std::cout << x << " " << y <<std::endl;
     std::pair<int, int> square = board->getSquarePos(x, y);
     //tura bialych
     if(whiteTourn)
@@ -574,8 +573,9 @@ bool Game::beat(std::pair<int, int> from, std::pair<int, int> to)
         {
             fields[x3][y3] = fields[x1][y1];
             fields[x1][y1] = EMPTY;
-            move(x1, y1, x3, y3);
             removePawn(x2, y2);
+            move(x1, y1, x3, y3);
+
             return true;
         }
         return false;
@@ -591,8 +591,9 @@ bool Game::beat(std::pair<int, int> from, std::pair<int, int> to)
         {
             fields[x3][y3] = fields[x1][y1];
             fields[x1][y1] = EMPTY;
-            move(x1, y1, x3, y3);
             removePawn(x2, y2);
+            move(x1, y1, x3, y3);
+
             return true;
         }
         return false;
@@ -636,8 +637,9 @@ bool Game::beat(std::pair<int, int> from, std::pair<int, int> to)
                 y1 = from.second;
                 fields[x3][y3] = fields[x1][y1];
                 fields[x1][y1] = EMPTY;
-                move(x1, y1, x3, y3);
                 removePawn(x2, y2);
+                move(x1, y1, x3, y3);
+
                 return true;
             }
             return false;
@@ -682,8 +684,9 @@ bool Game::beat(std::pair<int, int> from, std::pair<int, int> to)
                 y1 = from.second;
                 fields[x3][y3] = fields[x1][y1];
                 fields[x1][y1] = EMPTY;
-                move(x1, y1, x3, y3);
                 removePawn(x2, y2);
+                move(x1, y1, x3, y3);
+
                 return true;
             }
             return false;
@@ -747,7 +750,6 @@ void Game::changeTourn()
     whiteTourn = !whiteTourn;
     if(isGameOver())
     {
-        std::cout << "GAME OVER" <<std::endl;
         gameOverFlag = true;
     }
 }
@@ -777,7 +779,6 @@ bool Game::isGameOver()
                 {
                     if( moveIsPossible(std::make_pair(i, j)))
                     {
-                        //std::cout << "move " << i << " " << j << std::endl;
                         return false;
                     }
                     else

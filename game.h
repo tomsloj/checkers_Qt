@@ -12,9 +12,6 @@ class Game
 {
     enum field{EMPTY, BLOCKED, WHITE, BLACK, WHITE_QUEEN, BLACK_QUEEN};
 public:
-    //static QColor pawnBlack;
-    //static QColor pawnWhite;
-
 
     Game(QGraphicsScene *scene);
     ~Game();
@@ -50,7 +47,7 @@ private:
 
     const int BOARD_SIZE = 8;
 
-    int lastBeating = 20;
+    int lastBeating = 25;
 };
 
 #endif // GAME_H

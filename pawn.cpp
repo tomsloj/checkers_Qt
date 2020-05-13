@@ -9,8 +9,6 @@ Pawn::Pawn(int x, int y, int size, QColor color, int id)
     this->color = color;
     this->id = id;
     setZValue(10);
-    //qreal tmp = 0.5;
-    //setOpacity(tmp);
 }
 Pawn::Pawn(Pawn &pawn)
 {
@@ -83,7 +81,6 @@ void Pawn::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWid
         QSettings settings("MySoft", "Star Runner");
 
         color = settings.value("whitePawn", QColor(Qt::black)).value<QColor>();
-
     }
 
     QBrush brush(color);
@@ -131,5 +128,7 @@ void setGeometry(const QRect & geometry)
 void Pawn::changeOpacity(qreal opacity)
 {
     setOpacity(opacity);
-    update();
+    setZValue(10);
+    prepareGeometryChange();
+    emit updateOpacity();
 }

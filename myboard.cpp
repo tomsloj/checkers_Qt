@@ -82,16 +82,17 @@ void MyBoard::check(std::pair<int, int> p)
      {
          if(pawns[i]->getID() == id)
          {
+
              pawns[i]->setX(x*size);
              pawns[i]->setY(y*size);
              pawns[i]->setZValue(10);
              pawns[i]->update();
              /*
-             animationID = id;
+             animationID = i;
              newX = x;
              newY = y;
              //QPropertyAnimation* animation = new QPropertyAnimation(tmpPawn, "opacity");
-             QPropertyAnimation* animation = new QPropertyAnimation(pawns[i], "opacity");
+             animation = new QPropertyAnimation(pawns[i], "opacity");
              animation->setDuration(animationTime);
              animation->setStartValue(1.0);
              animation->setEndValue(0.0);
@@ -114,25 +115,27 @@ void MyBoard::check(std::pair<int, int> p)
 
      }
  }
-
+/*
  void MyBoard::appearAnimation()
  {
      pawns[animationID]->setX(newX*size);
      pawns[animationID]->setY(newY*size);
      pawns[animationID]->setZValue(10);
      pawns[animationID]->update();
-    // std::cout << "appear " << id <<std::endl;
-     QPropertyAnimation* animation = new QPropertyAnimation(pawns[animationID], "opacity");
+     scene->update();
+     animation = new QPropertyAnimation(pawns[animationID], "opacity");
      animation->setDuration(animationTime);
      animation->setStartValue(0.0);
      animation->setEndValue(1.0);
      animation->start();
+     //QObject::connect(pawns[animationID], SIGNAL(updateOpacity()), scene, SLOT(update()));
  }
 
  void MyBoard::changeCoordinates(int x, int y)
  {
 
  }
+ */
  void MyBoard::addBlackPawn(int x, int y, int id)
  {
     Pawn *p = new Pawn(x*size, y*size, size, Qt::black, id);
@@ -168,15 +171,14 @@ void MyBoard::check(std::pair<int, int> p)
          if((*it)->getID() == id)
          {
              /*
-             QPropertyAnimation* animation = new QPropertyAnimation((*it), "opacity");
-             animation->setDuration(animationTime);
+             animation = new QPropertyAnimation((*it), "opacity");
+             animation->setDuration(animationTime * 10);
              animation->setStartValue(1.0);
              animation->setEndValue(0.0);
              QObject::connect(animation, SIGNAL(finished()), SLOT(eraseIterator()));
              animation->start();
              iterator = it;
              */
-
              Pawn* p = (*it);
              if(p->scene() != NULL)
                 scene->removeItem(p);
@@ -189,17 +191,16 @@ void MyBoard::check(std::pair<int, int> p)
          }
      }
  }
-
+/*
  void MyBoard::eraseIterator()
  {
-     std::cout << "end" << std::endl;
      Pawn* p = (*iterator);
      if(p->scene() != NULL)
         scene->removeItem(p);
      (p)->setZValue(-111);
      pawns.erase(iterator);
  }
-
+*/
  int MyBoard::getPawnID(int x, int y)
  {
      x = x * size;

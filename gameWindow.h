@@ -34,8 +34,6 @@ public:
 
 private slots:
     void toolBarAction(QAction* action);
-    //void resizeEvent(QResizeEvent *event);
-    //void mousePressEvent(QMouseEvent *event);
     bool eventFilter(QObject*o,QEvent*e);
 
 private:

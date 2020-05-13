@@ -23,7 +23,6 @@ public:
     QGraphicsEllipseItem* getPawn();
     void removePawn();
 private:
-    bool isEmpty();
     bool toUse;
     QColor color;
 

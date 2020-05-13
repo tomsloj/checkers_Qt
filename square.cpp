@@ -36,8 +36,6 @@ bool Square::isAvaliable()
 void Square::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget /*= nullptr*/)
 {
     QRectF rec = boundingRect();
-    //int wid = rec.size().width();
-    //int hei = rec.size().height();
 
     QBrush brush(color);
     painter->setPen(color);
@@ -52,8 +50,3 @@ QRectF Square::boundingRect() const
     return QRectF(x,y, size, size);
 }
 
-bool Square::isEmpty()
-{
-    //TODO sprawdzenie czy ma dziecko
-    return true;
-}
